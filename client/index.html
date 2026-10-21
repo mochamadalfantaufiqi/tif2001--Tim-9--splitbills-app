@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Split Bill App</title>
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-color: #1f2937;
+      --border-color: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 420px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h2 {
+      font-size: 24px;
+      color: var(--primary-color);
+    }
+
+    .header p {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 5px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    button.btn-primary {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 10px;
+    }
+
+    button.btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .result-card {
+      margin-top: 25px;
+      padding: 20px;
+      background-color: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      display: none;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .result-item.total {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary-color);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 12px;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h2>Split Bill</h2>
+      <p>Hitung pembagian tagihan dengan mudah</p>
+    </div>
+
+    <div class="form-group">
+      <label for="total">Total Tagihan (Rp)</label>
+      <input type="number" id="total" placeholder="0">
+    </div>
+
+    <div class="form-group">
+      <label for="jumlahOrang">Jumlah Orang</label>
+      <input type="number" id="jumlahOrang" placeholder="1">
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="pajak">Pajak (%)</label>
+        <input type="number" id="pajak" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label for="tip">Tip (%)</label>
+        <input type="number" id="tip" placeholder="0">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="hitungSplit()">Hitung Sekarang</button>
+
+    <div class="result-card" id="hasilCard">
+      <div class="result-item">
+        <span>Subtotal / orang:</span>
+        <span id="subtotalPerOrang">Rp 0</span>
+      </div>
+      <div class="result-item">
+        <span>Pajak & Tip / orang:</span>
+        <span id="extraPerOrang">Rp 0</span>
+      </div>
+      <div class="result-item total">
+        <span>Total per Orang:</span>
+        <span id="totalPerOrang">Rp 0</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function hitungSplit() {
+      const total = parseFloat(document.getElementById('total').value) || 0;
+      const orang = parseInt(document.getElementById('jumlahOrang').value) || 0;
+      const pajak = parseFloat(document.getElementById('pajak').value) || 0;
+      const tip = parseFloat(document.getElementById('tip').value) || 0;
+
+      if (total <= 0 || orang <= 0) {
+        alert('Harap masukkan total tagihan dan jumlah orang yang valid!');
+        return;
+      }
+
+      // Perhitungan
+      const nominalPajak = (total * pajak) / 100;
+      const nominalTip = (total * tip) / 100;
+      const grandTotal = total + nominalPajak + nominalTip;
+
+      const subtotalOrang = total / orang;
+      const extraOrang = (nominalPajak + nominalTip) / orang;
+      const totalOrang = grandTotal / orang;
+
+      // Format Rupiah
+      const formatRp = (num) => 'Rp ' + Math.round(num).toLocaleString('id-ID');
+
+      // Tampilkan ke UI
+      document.getElementById('subtotalPerOrang').innerText = formatRp(subtotalOrang);
+      document.getElementById('extraPerOrang').innerText = formatRp(extraOrang);
+      document.getElementById('totalPerOrang').innerText = formatRp(totalOrang);
+
+      document.getElementById('hasilCard').style.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
