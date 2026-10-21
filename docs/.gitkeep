@@ -1,1 +1,32 @@
+# Checklist Kriteria Review Kode
+
+Gunakan checklist ini saat mereview Pull Request rekan tim.
+
+## Umum
+- [ ] PR fokus pada satu fitur atau satu perbaikan
+- [ ] Deskripsi PR jelas dan sesuai dengan perubahan
+- [ ] Tidak ada kode yang dikomentari atau `console.log` debug tertinggal
+
+## Kualitas Kode
+- [ ] Penamaan variabel dan fungsi jelas serta konsisten
+- [ ] Tidak ada duplikasi kode yang mudah dihindari
+- [ ] Error ditangani dengan benar
+
+## Keamanan (terutama fitur auth)
+- [ ] Password di-hash, tidak disimpan sebagai teks biasa
+- [ ] JWT secret dibaca dari environment variable, bukan ditulis di kode
+- [ ] Input divalidasi di sisi client dan server
+- [ ] Tidak ada file `.env` atau secret yang ter-commit
+
+## Integrasi
+- [ ] Endpoint sesuai dengan kontrak API yang disepakati tim
+- [ ] Format request dan response cocok antara client dan server
+- [ ] CI berjalan tanpa error
+
+## Keputusan Review
+- [ ] Approve
+- [ ] Request changes (tuliskan alasannya di komentar PR)
+
+## Catatan Reviewer
+Tulis masukan di sini atau langsung di komentar PR.
 
