@@ -1,0 +1,16 @@
+ktor:
+  deployment:
+    port: 8080
+  application:
+    modules:
+      - com.splitbills.HttpKt.configureHttp
+      - com.splitbills.SerializationKt.configureSerialization
+      - com.splitbills.SecurityKt.configureSecurity
+      - com.splitbills.StatusPagesKt.configureStatusPages
+      - com.splitbills.RoutingKt.configureRouting
+
+# 🟢 Tambahkan konfigurasi database di luar blok ktor:, atau di bawahnya:
+database:
+  jdbcUrl: "jdbc:postgresql://db.YOUR_PROJECT_REF.supabase.co:5432/postgres?sslmode=require"
+  user: "postgres"
+  password: "iqbal300505050"
