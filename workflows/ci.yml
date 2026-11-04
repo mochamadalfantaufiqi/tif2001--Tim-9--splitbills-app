@@ -9,6 +9,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -18,8 +21,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Dependencies & Run Test
-        run: |
-          cd server
-          npm install
-          npm test
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Unit Tests with Jest
+        run: npm test
