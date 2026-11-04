@@ -1,49 +1,28 @@
-name: CI - Static Code Analysis & Linting
+name: CI Workflow
 
 on:
   pull_request:
-    branches: [ "main", "master", "dev" ]
+    branches: [ main ]
   push:
-    branches: [ "main", "master", "dev" ]
+    branches: [ main ]
 
 jobs:
-  lint-and-check:
-    name: Lint & Code Quality
+  test:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20'
 
-      - name: Install Client Dependencies
-        run: |
-          if [ -d "client" ]; then
-            cd client && npm ci || npm install
-          fi
-        shell: bash
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Lint Client
-        run: |
-          if [ -d "client" ]; then
-            cd client && npm run lint --if-present
-          fi
-        shell: bash
-
-      - name: Install Server Dependencies
-        run: |
-          if [ -d "server" ]; then
-            cd server && npm ci || npm install
-          fi
-        shell: bash
-
-      - name: Lint Server
-        run: |
-          if [ -d "server" ]; then
-            cd server && npm run lint --if-present
-          fi
-        shell: bash
+      - name: Run Unit Tests with Jest
+        run: npm test
